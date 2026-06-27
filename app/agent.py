@@ -171,7 +171,7 @@ async def security_checkpoint(ctx: Context, node_input: Any) -> AsyncGenerator[E
     yield Event(output=scrubbed_query, route="pass", state={"query": scrubbed_query, "security_passed": True, "security_log": "All checks passed."})
 
 @node
-async def po_approval_node(ctx: Context, node_input: Event) -> AsyncGenerator[Event, None]:
+async def po_approval_node(ctx: Context, node_input: Any) -> AsyncGenerator[Event, None]:
     # Check if we have received resume input for approval
     if not ctx.resume_inputs or "po_approval" not in ctx.resume_inputs:
         log_audit(
@@ -206,7 +206,7 @@ async def po_approval_node(ctx: Context, node_input: Event) -> AsyncGenerator[Ev
         )
 
 @node
-async def complete_order(ctx: Context, node_input: Event) -> AsyncGenerator[Event, None]:
+async def complete_order(ctx: Context, node_input: Any) -> AsyncGenerator[Event, None]:
     comment = ctx.state.get("po_approval_comment", "")
     log_audit(
         severity="INFO",
@@ -218,7 +218,7 @@ async def complete_order(ctx: Context, node_input: Event) -> AsyncGenerator[Even
     yield Event(output=msg)
 
 @node
-async def reject_order(ctx: Context, node_input: Event) -> AsyncGenerator[Event, None]:
+async def reject_order(ctx: Context, node_input: Any) -> AsyncGenerator[Event, None]:
     comment = ctx.state.get("po_approval_comment", "")
     log_audit(
         severity="WARNING",
@@ -230,7 +230,7 @@ async def reject_order(ctx: Context, node_input: Event) -> AsyncGenerator[Event,
     yield Event(output=msg)
 
 @node
-async def security_error_node(ctx: Context, node_input: Event) -> AsyncGenerator[Event, None]:
+async def security_error_node(ctx: Context, node_input: Any) -> AsyncGenerator[Event, None]:
     log_audit(
         severity="WARNING",
         event_type="WORKFLOW_BLOCKED",
