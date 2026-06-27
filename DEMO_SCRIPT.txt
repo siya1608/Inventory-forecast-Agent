@@ -1,0 +1,50 @@
+[0:00 — HOOK]
+Managing inventory and drafting replenishment purchase orders in a retail or business operation is highly repetitive, prone to human error, and exposes company systems to serious security risks when automated incorrectly. Today, I am excited to show you how we solve all of these challenges with the Inventory Forecast Agent.
+
+(pause)
+
+[0:20 — WHAT IT IS]
+This project is an automated, secure multi-agent workflow built using the Google Agent Development Kit and Model Context Protocol. It fits into the Agents for Business track, streamlining supply chain tasks while placing data privacy and human oversight at the center of the solution.
+
+(pause)
+
+[0:40 — SHOW THE BANNER]
+(show assets/cover_page_banner.png)
+As you can see on the banner, the project is designed around three main pillars: Sales Analytics, PO Drafting, and Security Policy. It is automated, secure, and intelligent.
+
+(pause)
+
+[1:00 — ARCHITECTURE]
+(show assets/architecture_diagram.png)
+Let's take a look at the system architecture. 
+Every query starts at the START node and immediately enters the Security Checkpoint function node, which filters malicious content before it ever reaches the core model.
+If it passes, the request is routed to the Inventory Orchestrator agent.
+The orchestrator coordinates the flow and delegates tasks using AgentTool to call two specialized sub-agents: the Sales Analyzer and the Purchase Order Drafter.
+Both sub-agents connect to our local Model Context Protocol server over stdio transport to query live inventory levels, weekly sales velocity, and supplier contact details.
+Finally, the orchestrator outputs the drafted PO and passes control to the PO Approval Node, which triggers a Human-in-the-Loop request for manual operator verification.
+Approved orders proceed to the Complete Order node, while rejected orders trigger the Reject Order node.
+
+(pause)
+
+[2:00 — LIVE DEMO]
+(switch to playground at localhost:18081)
+Let's see the agent in action using the ADK Web Playground.
+I will submit a query asking the agent to check stock levels, identify items below threshold, and draft a PO.
+The orchestrator immediately triggers. Behind the scenes, the Sales Analyzer queries the MCP server and flags the Wireless Mouse and Mechanical Keyboard as running low.
+The PO Drafter fetches the supplier contact email for each product, computes the recommended replenishment quantity, and drafts a structured Purchase Order.
+Now, notice the playground UI pauses and prompts me: "Please review the drafted purchase order. Do you approve?"
+I will type "Yes" and hit send.
+The workflow resumes, routes to the complete_order node, and finalizes the replenishment order.
+If we test the safety rules by inputting a destructive query like "delete inventory from database", the Security Checkpoint flags it immediately, aborts the run, and displays a warning message.
+
+(pause)
+
+[3:00 — SECURITY & MCP]
+To make sure this business agent is production-ready, the Security Checkpoint uses regular expressions to scrub sensitive customer data like credit cards and emails, detects prompt injection keywords, and writes structured JSON logs to the terminal for auditing.
+The MCP server provides standard, decoupled tool access to our sales history, stock thresholds, supplier sheets, and purchase order files without exposing the database to the internet.
+
+(pause)
+
+[3:30 — IMPACT / CLOSE]
+This agent saves procurement managers hours of tedious cross-referencing while ensuring no purchase order leaves the system without a double-check from security filters and a human supervisor. It brings safety, control, and efficiency to business operations. 
+Thank you for your time.
